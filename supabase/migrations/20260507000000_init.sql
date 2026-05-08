@@ -38,6 +38,7 @@ create table rounds (
   id uuid primary key default gen_random_uuid(),
   date date not null default current_date,
   caregiver_id uuid not null references profiles(id),
+  -- Denormalized array for offline sync simplicity; referential integrity enforced at application layer
   patient_ids uuid[] not null default '{}'
 );
 
@@ -82,6 +83,8 @@ create policy "authenticated read patients" on patients
   for select using (auth.role() = 'authenticated');
 create policy "creator write patients" on patients
   for insert with check (auth.uid() = created_by);
+create policy "creator update patients" on patients
+  for update using (auth.uid() = created_by);
 
 -- Rounds: user sees and manages own rounds
 create policy "own rounds" on rounds
