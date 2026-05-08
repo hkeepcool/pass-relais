@@ -12,6 +12,16 @@ serve(async (req) => {
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
   )
 
+  const authHeader = req.headers.get('Authorization')
+  if (!authHeader) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 })
+  }
+  const token = authHeader.replace('Bearer ', '')
+  const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+  if (authError || !user || user.id !== userId) {
+    return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403 })
+  }
+
   const { data: profile } = await supabase
     .from('profiles')
     .select('full_name, webauthn_credentials')

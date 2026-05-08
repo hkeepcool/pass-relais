@@ -10,6 +10,7 @@ export function AuthCallbackPage() {
   const [step, setStep] = useState<Step>('processing')
   const [error, setError] = useState<string | null>(null)
   const [userId, setUserId] = useState<string | null>(null)
+  const [registerError, setRegisterError] = useState<string | null>(null)
 
   useEffect(() => {
     supabase.auth.getSession().then(async ({ data, error: err }) => {
@@ -42,8 +43,12 @@ export function AuthCallbackPage() {
 
   const handleRegister = async () => {
     if (!userId) return
-    await registerWebAuthn(userId)
-    navigate('/patients')
+    const ok = await registerWebAuthn(userId)
+    if (!ok) {
+      setRegisterError("Échec de l'activation biométrique. Veuillez réessayer.")
+      return
+    }
+    navigate('/patients', { replace: true })
   }
 
   if (step === 'error') {
@@ -62,6 +67,7 @@ export function AuthCallbackPage() {
           <p className="text-gray-600">
             Utilisez votre empreinte ou Face ID pour vous connecter rapidement la prochaine fois.
           </p>
+          {registerError && <p className="text-red-600 text-sm">{registerError}</p>}
           <button
             onClick={handleRegister}
             className="w-full rounded-lg bg-blue-600 py-3 text-lg font-medium text-white"
@@ -69,7 +75,7 @@ export function AuthCallbackPage() {
             Activer
           </button>
           <button
-            onClick={() => navigate('/patients')}
+            onClick={() => navigate('/patients', { replace: true })}
             className="w-full rounded-lg border py-3 text-lg text-gray-600"
           >
             Plus tard

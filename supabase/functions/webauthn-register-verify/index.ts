@@ -13,6 +13,16 @@ serve(async (req) => {
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
   )
 
+  const authHeader = req.headers.get('Authorization')
+  if (!authHeader) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 })
+  }
+  const token = authHeader.replace('Bearer ', '')
+  const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+  if (authError || !user || user.id !== userId) {
+    return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403 })
+  }
+
   const { data: challengeRow } = await supabase
     .from('webauthn_challenges')
     .select('challenge, created_at')
@@ -61,7 +71,7 @@ serve(async (req) => {
     ],
   }).eq('id', userId)
 
-  await supabase.from('webauthn_challenges').delete().eq('user_id', userId)
+  await supabase.from('webauthn_challenges').delete().eq('challenge', challengeRow.challenge)
 
   return new Response(JSON.stringify({ verified: true }), {
     headers: { 'Content-Type': 'application/json' },

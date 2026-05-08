@@ -3,6 +3,9 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { generateAuthenticationOptions } from 'npm:@simplewebauthn/server@9'
 
 serve(async (req) => {
+  // Auth flow: caller is unauthenticated (no session yet). userId is provided by the client.
+  // The challenge is stored per-userId; even if guessed, the attacker cannot complete
+  // the WebAuthn response without the user's registered authenticator device.
   const { userId } = await req.json()
   const rpID = new URL(req.headers.get('origin') ?? 'http://localhost').hostname
 

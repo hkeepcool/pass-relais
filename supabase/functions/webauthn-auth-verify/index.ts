@@ -4,6 +4,9 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { verifyAuthenticationResponse } from 'npm:@simplewebauthn/server@9'
 
 serve(async (req) => {
+  // Auth flow: caller is unauthenticated (no session yet). userId is provided by the client.
+  // The challenge is stored per-userId; even if guessed, the attacker cannot complete
+  // the WebAuthn response without the user's registered authenticator device.
   const { userId, credential } = await req.json()
   const origin = req.headers.get('origin') ?? 'http://localhost'
   const rpID = new URL(origin).hostname
@@ -67,7 +70,7 @@ serve(async (req) => {
       : c,
   )
   await supabase.from('profiles').update({ webauthn_credentials: updatedCredentials }).eq('id', userId)
-  await supabase.from('webauthn_challenges').delete().eq('user_id', userId)
+  await supabase.from('webauthn_challenges').delete().eq('challenge', challengeRow.challenge)
 
   // Generate a one-time token the client can exchange for a full session via verifyOtp
   const { data: userData } = await supabase.auth.admin.getUserById(userId)

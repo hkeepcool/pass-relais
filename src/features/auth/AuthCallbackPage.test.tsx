@@ -181,8 +181,42 @@ describe('AuthCallbackPage', () => {
 
     await waitFor(() => {
       expect(mockRegisterWebAuthn).toHaveBeenCalledWith('uid')
-      expect(mockNavigate).toHaveBeenCalledWith('/patients')
+      expect(mockNavigate).toHaveBeenCalledWith('/patients', { replace: true })
     })
+  })
+
+  it('shows error message and does not navigate when registerWebAuthn fails', async () => {
+    mockGetSession.mockResolvedValue({
+      data: {
+        session: {
+          access_token: 'tok',
+          refresh_token: 'ref',
+          expires_at: 9999999999,
+          user: { id: 'uid' },
+        },
+      },
+      error: null,
+    })
+    mockIsWebAuthnSupported.mockResolvedValue(true)
+    mockSingle.mockResolvedValue({ data: { webauthn_credentials: [] }, error: null })
+    mockRegisterWebAuthn.mockResolvedValue(false)
+
+    render(
+      <MemoryRouter>
+        <AuthCallbackPage />
+      </MemoryRouter>,
+    )
+
+    const activerButton = await screen.findByText('Activer')
+    await userEvent.click(activerButton)
+
+    await waitFor(() => {
+      expect(mockRegisterWebAuthn).toHaveBeenCalledWith('uid')
+      expect(
+        screen.getByText("Échec de l'activation biométrique. Veuillez réessayer."),
+      ).toBeInTheDocument()
+    })
+    expect(mockNavigate).not.toHaveBeenCalled()
   })
 
   it('navigates to /patients when Plus tard is clicked', async () => {
@@ -210,7 +244,7 @@ describe('AuthCallbackPage', () => {
     await userEvent.click(plusTardButton)
 
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/patients')
+      expect(mockNavigate).toHaveBeenCalledWith('/patients', { replace: true })
     })
   })
 })
