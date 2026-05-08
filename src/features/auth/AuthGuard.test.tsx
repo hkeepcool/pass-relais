@@ -25,9 +25,9 @@ function renderWithRouter(initialEntry: string) {
 }
 
 describe('AuthGuard', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks()
-    resetDbForTests()
+    await resetDbForTests()
     mockGetSession.mockResolvedValue({ data: { session: null }, error: null })
     mockOnAuthStateChange.mockReturnValue({
       data: { subscription: { unsubscribe: vi.fn() } },

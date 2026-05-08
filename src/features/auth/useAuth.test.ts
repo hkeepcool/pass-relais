@@ -6,9 +6,9 @@ import { resetDbForTests } from '../../shared/db/schema'
 import { saveSession } from '../../shared/db/session-cache.db'
 
 describe('useAuth', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks()
-    resetDbForTests()
+    await resetDbForTests()
     mockGetSession.mockResolvedValue({ data: { session: null }, error: null })
     mockOnAuthStateChange.mockReturnValue({
       data: { subscription: { unsubscribe: vi.fn() } },
