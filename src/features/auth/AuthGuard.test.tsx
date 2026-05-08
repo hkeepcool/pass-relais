@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
-import '../../test/mocks/supabase'
 import { mockGetSession, mockOnAuthStateChange } from '../../test/mocks/supabase'
 import { AuthGuard } from './AuthGuard'
 import { resetDbForTests } from '../../shared/db/schema'
