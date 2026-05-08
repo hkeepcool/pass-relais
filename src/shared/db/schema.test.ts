@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { getDb, resetDbForTests } from './schema'
 
 describe('IndexedDB schema', () => {
-  beforeEach(() => resetDbForTests())
+  beforeEach(async () => await resetDbForTests())
 
   it('opens the database with all four stores', async () => {
     const db = await getDb()

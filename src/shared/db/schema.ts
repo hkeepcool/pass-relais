@@ -82,6 +82,15 @@ export function getDb(): Promise<IDBPDatabase<PassRelaisDB>> {
   return _db
 }
 
-export function resetDbForTests(): void {
+export async function resetDbForTests(): Promise<void> {
+  if (_db) {
+    const db = await _db
+    const tx = db.transaction(['patients', 'observations', 'sync_queue', 'session_cache'], 'readwrite')
+    await tx.objectStore('patients').clear()
+    await tx.objectStore('observations').clear()
+    await tx.objectStore('sync_queue').clear()
+    await tx.objectStore('session_cache').clear()
+    await tx.done
+  }
   _db = null
 }
