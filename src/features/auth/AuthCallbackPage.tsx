@@ -43,7 +43,7 @@ export function AuthCallbackPage() {
   const handleRegister = async () => {
     if (!userId) return
     await registerWebAuthn(userId)
-    navigate('/patients', { replace: true })
+    navigate('/patients')
   }
 
   if (step === 'error') {
@@ -69,7 +69,7 @@ export function AuthCallbackPage() {
             Activer
           </button>
           <button
-            onClick={() => navigate('/patients', { replace: true })}
+            onClick={() => navigate('/patients')}
             className="w-full rounded-lg border py-3 text-lg text-gray-600"
           >
             Plus tard

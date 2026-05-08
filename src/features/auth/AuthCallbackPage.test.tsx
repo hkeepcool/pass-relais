@@ -181,7 +181,7 @@ describe('AuthCallbackPage', () => {
 
     await waitFor(() => {
       expect(mockRegisterWebAuthn).toHaveBeenCalledWith('uid')
-      expect(mockNavigate).toHaveBeenCalledWith('/patients', { replace: true })
+      expect(mockNavigate).toHaveBeenCalledWith('/patients')
     })
   })
 
@@ -210,7 +210,7 @@ describe('AuthCallbackPage', () => {
     await userEvent.click(plusTardButton)
 
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/patients', { replace: true })
+      expect(mockNavigate).toHaveBeenCalledWith('/patients')
     })
   })
 })
