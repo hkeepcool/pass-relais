@@ -7,7 +7,7 @@ export function useSyncQueue(): void {
 
   useEffect(() => {
     if (isOnline) {
-      flushQueue()
+      flushQueue().catch(console.error)
     }
   }, [isOnline])
 }

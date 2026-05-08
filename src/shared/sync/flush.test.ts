@@ -16,11 +16,11 @@ vi.mock('../../lib/supabase', () => ({
 }))
 
 import { queryClient } from '../../lib/queryClient'
-vi.spyOn(queryClient, 'invalidateQueries').mockResolvedValue(undefined)
 
 describe('flushQueue', () => {
   beforeEach(async () => {
     vi.clearAllMocks()
+    vi.spyOn(queryClient, 'invalidateQueries').mockResolvedValue(undefined)
     await resetDbForTests()
     useAppStore.setState({ syncQueue: [], conflicts: [] })
   })
