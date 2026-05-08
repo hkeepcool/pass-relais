@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import '../../test/mocks/supabase'
 import { mockSendMagicLink } from '../../test/mocks/supabase'
 import { LoginPage } from './LoginPage'
 

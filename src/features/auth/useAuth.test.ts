@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { renderHook, act, waitFor } from '@testing-library/react'
-import '../../test/mocks/supabase'
 import { mockGetSession, mockOnAuthStateChange } from '../../test/mocks/supabase'
 import { useAuth } from './useAuth'
 import { resetDbForTests } from '../../shared/db/schema'

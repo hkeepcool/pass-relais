@@ -13,28 +13,33 @@ export function useAuth() {
     let cancelled = false
 
     const init = async () => {
-      const { data } = await supabase.auth.getSession()
-      if (data.session && !cancelled) {
-        setSession(data.session)
-        setState('authenticated')
-        await saveSession({
-          access_token: data.session.access_token,
-          refresh_token: data.session.refresh_token,
-          expires_at: data.session.expires_at ?? 0,
-        })
-        return
+      try {
+        const { data } = await supabase.auth.getSession()
+        if (data.session && !cancelled) {
+          setSession(data.session)
+          setState('authenticated')
+          await saveSession({
+            access_token: data.session.access_token,
+            refresh_token: data.session.refresh_token,
+            expires_at: data.session.expires_at ?? 0,
+          })
+          return
+        }
+        const cached = await getSession()
+        if (cached && isSessionValid(cached) && !cancelled) {
+          setState('authenticated')
+          return
+        }
+        if (!cancelled) setState('unauthenticated')
+      } catch {
+        if (!cancelled) setState('unauthenticated')
       }
-      const cached = await getSession()
-      if (cached && isSessionValid(cached) && !cancelled) {
-        setState('authenticated')
-        return
-      }
-      if (!cancelled) setState('unauthenticated')
     }
 
     init()
 
     const { data: listener } = supabase.auth.onAuthStateChange(async (event, s) => {
+      if (cancelled) return
       if (s) {
         setSession(s)
         setState('authenticated')
