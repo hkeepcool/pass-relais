@@ -10,6 +10,8 @@ export async function flushQueue(): Promise<void> {
   const items = await getAllQueuedItems()
   if (items.length === 0) return
 
+  let flushed = 0
+
   for (const item of items) {
     if (item.id === undefined) continue
     if (item.retries >= MAX_RETRIES) {
@@ -43,5 +45,10 @@ export async function flushQueue(): Promise<void> {
 
     await removeQueuedItem(item.id)
     await queryClient.invalidateQueries({ queryKey: [item.table] })
+    flushed++
+  }
+
+  if (flushed > 0) {
+    window.dispatchEvent(new CustomEvent('sync:complete'))
   }
 }
