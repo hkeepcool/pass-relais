@@ -1,0 +1,81 @@
+/* Pass-Relais — Design Tokens
+   ─────────────────────────────────────────────────────────────────────────
+   ACTIVE THEME: Change the import below to switch client themes.
+   All components reference CSS vars — no component changes needed.
+
+   Available themes:
+     ./themes/v2-clinical.css   ← Current: dark navy + electric teal (Geist)
+     ./themes/v1-editorial.css  ← Alt: warm navy + amber (Newsreader + IBM Plex)
+   ─────────────────────────────────────────────────────────────────────── */
+
+@import './themes/v2-clinical.css'; /* ← swap this line to rebrand */
+
+/* ── Base resets ─────────────────────────────────────────────────────── */
+body {
+  background-color: rgb(var(--bg-rgb));
+  color: rgb(var(--ink-rgb));
+  font-family: var(--font-ui-name), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display-name), system-ui, sans-serif;
+}
+
+/* ── Density modifier ────────────────────────────────────────────────── */
+[data-density="compact"] {
+  --row-h: 60px;
+  --tap-min: 44px;
+}
+
+/* ── Reduce motion ───────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+[data-motion="off"] *,
+[data-motion="off"] *::before,
+[data-motion="off"] *::after {
+  animation-duration: 1ms !important;
+  transition-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+}
+
+/* ── Keyframes ───────────────────────────────────────────────────────── */
+@keyframes pr-pulse-ring {
+  0%   { transform: scale(1);    opacity: 0.6; }
+  80%  { transform: scale(1.85); opacity: 0; }
+  100% { transform: scale(1.85); opacity: 0; }
+}
+
+@keyframes pr-pulse-dot {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.1); }
+}
+
+@keyframes pr-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pr-tick {
+  from { stroke-dashoffset: 24; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes pr-shimmer {
+  from { background-position: -200% 0; }
+  to   { background-position:  200% 0; }
+}
+
+/* ── Scrollbar suppression (iOS feel) ────────────────────────────────── */
+.pr-scroll::-webkit-scrollbar { width: 0; height: 0; }
+.pr-scroll { scrollbar-width: none; }
