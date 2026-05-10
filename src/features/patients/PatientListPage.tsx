@@ -32,6 +32,7 @@ export function PatientListPage() {
           <div className="text-center py-8 text-ink-2">
             <p>Impossible de charger les patients</p>
             <button
+              type="button"
               onClick={reload}
               className="mt-2 text-accent underline text-sm"
             >

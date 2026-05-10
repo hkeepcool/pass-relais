@@ -24,6 +24,7 @@ export function usePatients() {
   const [error, setError] = useState<Error | null>(null)
 
   const load = useCallback(async () => {
+    setIsLoading(true)
     try {
       const raw = await getAllPatients()
       const enriched = await Promise.all(
