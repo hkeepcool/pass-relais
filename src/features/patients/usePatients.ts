@@ -3,6 +3,7 @@ import { getAllPatients } from '../../shared/db/patients.db'
 import { getLatestObservationByPatientId } from '../../shared/db/observations.db'
 import type { Patient } from '../../shared/db/schema'
 import type { StatusTone } from '../../design-system'
+import { colorToTone } from '../../shared/utils/status'
 
 export interface PatientWithStatus extends Patient {
   statusTone: StatusTone
@@ -10,13 +11,6 @@ export interface PatientWithStatus extends Patient {
 }
 
 const STATUS_ORDER: Record<StatusTone, number> = { alert: 0, warn: 1, ok: 2, info: 3 }
-
-function colorToTone(color: 'red' | 'orange' | 'green' | null | undefined): StatusTone {
-  if (color === 'red') return 'alert'
-  if (color === 'orange') return 'warn'
-  if (color === 'green') return 'ok'
-  return 'info'
-}
 
 export function usePatients() {
   const [patients, setPatients] = useState<PatientWithStatus[]>([])
