@@ -40,6 +40,7 @@ export function usePatients() {
       setPatients(enriched)
       setError(null)
     } catch (e) {
+      setPatients([])
       setError(e instanceof Error ? e : new Error(String(e)))
     } finally {
       setIsLoading(false)
