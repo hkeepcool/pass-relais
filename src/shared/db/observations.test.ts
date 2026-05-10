@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { resetDbForTests } from './schema'
-import { upsertObservation, getObservationsByPatient } from './observations.db'
+import { upsertObservation, getObservationsByPatient, getLatestObservationByPatientId } from './observations.db'
 
 const obs = {
   id: 'o1',
@@ -30,5 +30,20 @@ describe('observations.db', () => {
   it('returns empty array for unknown patient', async () => {
     const results = await getObservationsByPatient('unknown')
     expect(results).toHaveLength(0)
+  })
+
+  it('returns the most recent observation for a patient', async () => {
+    const older = { ...obs, id: 'o1', recorded_at: '2026-05-07T08:00:00Z' }
+    const newer = { ...obs, id: 'o2', recorded_at: '2026-05-09T10:00:00Z', status_color: 'red' as const }
+    await upsertObservation(older)
+    await upsertObservation(newer)
+    const result = await getLatestObservationByPatientId('p1')
+    expect(result?.id).toBe('o2')
+    expect(result?.status_color).toBe('red')
+  })
+
+  it('returns undefined when patient has no observations', async () => {
+    const result = await getLatestObservationByPatientId('unknown')
+    expect(result).toBeUndefined()
   })
 })
