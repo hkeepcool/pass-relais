@@ -1,3 +1,41 @@
+// SpeechRecognition is not yet universally in lib.dom.d.ts
+declare global {
+  interface Window {
+    SpeechRecognition: (new () => SpeechRecognition) | undefined
+    webkitSpeechRecognition: (new () => SpeechRecognition) | undefined
+  }
+  interface SpeechRecognition extends EventTarget {
+    continuous: boolean
+    interimResults: boolean
+    lang: string
+    start(): void
+    stop(): void
+    onresult: ((event: SpeechRecognitionEvent) => void) | null
+    onspeechend: (() => void) | null
+    onerror: ((event: SpeechRecognitionErrorEvent) => void) | null
+  }
+  interface SpeechRecognitionEvent extends Event {
+    resultIndex: number
+    results: SpeechRecognitionResultList
+  }
+  interface SpeechRecognitionResultList {
+    readonly length: number
+    [index: number]: SpeechRecognitionResult | undefined
+  }
+  interface SpeechRecognitionResult {
+    readonly isFinal: boolean
+    readonly length: number
+    [index: number]: SpeechRecognitionAlternative | undefined
+  }
+  interface SpeechRecognitionAlternative {
+    readonly transcript: string
+    readonly confidence: number
+  }
+  interface SpeechRecognitionErrorEvent extends Event {
+    readonly error: string
+  }
+}
+
 import type { TranscriptionAdapter } from '../useTranscription'
 
 export class WebSpeechAdapter implements TranscriptionAdapter {
@@ -11,9 +49,7 @@ export class WebSpeechAdapter implements TranscriptionAdapter {
   }
 
   start(onInterim: (t: string) => void, onFinal: (t: string) => void): void {
-    const Impl =
-      window.SpeechRecognition ??
-      (window as Window & { webkitSpeechRecognition?: typeof SpeechRecognition }).webkitSpeechRecognition
+    const Impl = window.SpeechRecognition ?? window.webkitSpeechRecognition
     if (!Impl) return
 
     this.recognition = new Impl()
@@ -21,7 +57,7 @@ export class WebSpeechAdapter implements TranscriptionAdapter {
     this.recognition.interimResults = true
     this.recognition.lang           = 'fr-FR'
 
-    this.recognition.onresult = (event) => {
+    this.recognition.onresult = (event: SpeechRecognitionEvent) => {
       let interim = ''
       let final   = ''
       for (let i = event.resultIndex; i < event.results.length; i++) {

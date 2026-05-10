@@ -21,10 +21,13 @@ export function useTranscription(adapter: TranscriptionAdapter): TranscriptionRe
   )
   const [transcript, setTranscript] = useState('')
   const [duration,   setDuration]   = useState(0)
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const timerRef   = useRef<ReturnType<typeof setInterval> | null>(null)
+  const stateRef   = useRef(state)
+  // keep stateRef in sync with state
+  useEffect(() => { stateRef.current = state }, [state])
 
   const start = useCallback(() => {
-    if (state !== 'idle') return
+    if (stateRef.current !== 'idle') return
     setState('recording')
     setTranscript('')
     setDuration(0)
@@ -37,14 +40,14 @@ export function useTranscription(adapter: TranscriptionAdapter): TranscriptionRe
         if (timerRef.current) clearInterval(timerRef.current)
       },
     )
-  }, [state, adapter])
+  }, [adapter])  // no state in deps — uses stateRef instead
 
   const stop = useCallback(() => {
-    if (state !== 'recording') return
+    if (stateRef.current !== 'recording') return
     adapter.stop()
     setState('done')
     if (timerRef.current) clearInterval(timerRef.current)
-  }, [state, adapter])
+  }, [adapter])  // no state in deps
 
   const reset = useCallback(() => {
     setState(adapter.isSupported() ? 'idle' : 'unsupported')
