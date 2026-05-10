@@ -23,10 +23,26 @@
       "Bash(npm run)",
       "Bash(npm test)",
       "Bash(node -e \"const { version } = require\\(''./node_modules/@testing-library/react/package.json''\\); console.log\\(version\\)\")",
-      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\({**d.get\\(''dependencies'',{}\\), **d.get\\(''devDependencies'',{}\\)}, indent=2\\)\\)\")"
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\({**d.get\\(''dependencies'',{}\\), **d.get\\(''devDependencies'',{}\\)}, indent=2\\)\\)\")",
+      "Bash(ls \"c:\\\\Projets\\\\ReactProjects\\\\Pass_Relais\\\\src\\\\shared\\\\components\"\" 2>/dev/null || echo \"Directory does not exist \")",
+      "Bash(node -e \"const b=Buffer.from\\(''iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='',''base64''\\);require\\(''fs''\\).writeFileSync\\(''c:/Projets/ReactProjects/Pass_Relais/public/icon-192.png'',b\\);require\\(''fs''\\).writeFileSync\\(''c:/Projets/ReactProjects/Pass_Relais/public/icon-512.png'',b\\);\")",
+      "Bash(node --version)",
+      "Bash(npm ls vite-plugin-pwa)",
+      "Bash(node -e \"console.log\\(typeof globalThis.crypto\\)\")",
+      "Bash(node -e \"console.log\\(typeof crypto\\)\")",
+      "Bash(NODE_OPTIONS=\"--experimental-global-webcrypto\" npx vite build)",
+      "Bash(npm ls cross-env)",
+      "Bash(git commit *)",
+      "Bash(Get-ChildItem *)",
+      "Bash(cat)",
+      "Bash(node /tmp/test-edge-cases2.mjs)",
+      "Bash(npm run *)",
+      "Bash(git checkout *)",
+      "Bash(git pull *)"
     ]
   },
   "enabledPlugins": {
-    "superpowers@claude-plugins-official": true
+    "frontend-design@claude-plugins-official": true,
+    "security-review@claude-plugins-official": true
   }
 }
