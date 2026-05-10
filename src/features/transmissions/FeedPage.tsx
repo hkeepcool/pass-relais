@@ -22,16 +22,21 @@ function buildText(obs: Observation): string {
   if (obs.pain != null)                parts.push(`douleur ${obs.pain}/5`)
   if (obs.mood === 'confused')         parts.push('état confusionnel')
   else if (obs.mood === 'anxious')     parts.push('anxieux')
+  if (obs.bowel_movements != null) {
+    const label = obs.bowel_movements === 3 ? '3+ selles' : `${obs.bowel_movements} selle${obs.bowel_movements !== 1 ? 's' : ''}`
+    parts.push(obs.bowel_note ? `${label} (${obs.bowel_note})` : label)
+  }
   if (obs.note_text)                   parts.push(obs.note_text)
   return parts.length > 0 ? parts.join(', ') + '.' : 'Observation enregistrée.'
 }
 
 function buildMetrics(obs: Observation): FeedMetric[] {
   const m: FeedMetric[] = []
-  if (obs.sleep    != null) m.push({ label: 'Sommeil', value: obs.sleep })
-  if (obs.appetite != null) m.push({ label: 'Appétit', value: obs.appetite })
-  if (obs.pain     != null) m.push({ label: 'Douleur', value: `${obs.pain}/5` })
-  if (obs.mood     != null) m.push({ label: 'Humeur',  value: obs.mood })
+  if (obs.sleep           != null) m.push({ label: 'Sommeil', value: obs.sleep })
+  if (obs.appetite        != null) m.push({ label: 'Appétit', value: obs.appetite })
+  if (obs.pain            != null) m.push({ label: 'Douleur', value: `${obs.pain}/5` })
+  if (obs.mood            != null) m.push({ label: 'Humeur',  value: obs.mood })
+  if (obs.bowel_movements != null) m.push({ label: 'Selles',  value: obs.bowel_movements === 3 ? '3+' : String(obs.bowel_movements) })
   return m
 }
 

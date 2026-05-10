@@ -7,12 +7,14 @@ import { deriveStatusColor } from '../../shared/utils/status'
 import type { Observation } from '../../shared/db/schema'
 
 export interface ObservationFields {
-  sleep:          Observation['sleep']
-  appetite:       Observation['appetite']
-  pain:           Observation['pain']
-  mood:           Observation['mood']
-  note_text:      string | null
-  note_audio_url: string | null
+  sleep:            Observation['sleep']
+  appetite:         Observation['appetite']
+  pain:             Observation['pain']
+  mood:             Observation['mood']
+  bowel_movements:  Observation['bowel_movements']
+  bowel_note:       Observation['bowel_note']
+  note_text:        string | null
+  note_audio_url:   string | null
 }
 
 export function useSaveObservation(patientId: string, caregiverId: string) {

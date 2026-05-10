@@ -8,10 +8,11 @@ import { useSaveObservation } from './useSaveObservation'
 import { useAuth } from '../auth/useAuth'
 import type { Observation } from '../../shared/db/schema'
 
-type SleepValue    = Observation['sleep']
-type AppetiteValue = Observation['appetite']
-type PainValue     = Observation['pain']
-type MoodValue     = Observation['mood']
+type SleepValue          = Observation['sleep']
+type AppetiteValue       = Observation['appetite']
+type PainValue           = Observation['pain']
+type MoodValue           = Observation['mood']
+type BowelMovementsValue = Observation['bowel_movements']
 
 const adapter = new WebSpeechAdapter()
 
@@ -45,20 +46,29 @@ const PAIN_GLYPHS:    Record<number, string>           = { 1: '●', 2: '●●'
 const PAIN_SUBLABELS: Partial<Record<number, string>>  = { 1: 'Légère', 3: 'Modérée', 5: 'Sévère' }
 const PAIN_TONES:     Record<number, TapTone>          = { 1: 'ok', 2: 'ok', 3: 'warn', 4: 'alert', 5: 'alert' }
 
+const BOWEL_OPTIONS: [BowelMovementsValue, string, string][] = [
+  [0, '0',  '—'],
+  [1, '1',  '①'],
+  [2, '2',  '②'],
+  [3, '3+', '③'],
+]
+
 export function PatientDetailPage() {
   const { id = '' } = useParams<{ id: string }>()
   const navigate    = useNavigate()
   const { session } = useAuth()
   const caregiverId = session?.user.id ?? 'offline'
 
-  const [sleep,    setSleep]    = useState<SleepValue>(null)
-  const [appetite, setAppetite] = useState<AppetiteValue>(null)
-  const [pain,     setPain]     = useState<PainValue>(null)
-  const [mood,     setMood]     = useState<MoodValue>(null)
+  const [sleep,           setSleep]          = useState<SleepValue>(null)
+  const [appetite,        setAppetite]       = useState<AppetiteValue>(null)
+  const [pain,            setPain]           = useState<PainValue>(null)
+  const [mood,            setMood]           = useState<MoodValue>(null)
+  const [bowelMovements,  setBowelMovements] = useState<BowelMovementsValue>(null)
+  const [bowelNote,       setBowelNote]      = useState('')
 
   const transcription          = useTranscription(adapter)
   const { save, isSaving }     = useSaveObservation(id, caregiverId)
-  const hasSelection           = sleep !== null || appetite !== null || pain !== null || mood !== null
+  const hasSelection           = sleep !== null || appetite !== null || pain !== null || mood !== null || bowelMovements !== null
 
   const handleSubmit = async () => {
     await save({
@@ -66,8 +76,10 @@ export function PatientDetailPage() {
       appetite,
       pain,
       mood,
-      note_text:      transcription.transcript || null,
-      note_audio_url: null,
+      bowel_movements: bowelMovements,
+      bowel_note:      bowelNote.trim() || null,
+      note_text:       transcription.transcript || null,
+      note_audio_url:  null,
     })
   }
 
@@ -148,6 +160,32 @@ export function PatientDetailPage() {
               />
             ))}
           </div>
+        </div>
+
+        {/* Selles */}
+        <div>
+          <SectionLabel>Selles (nombre)</SectionLabel>
+          <div role="radiogroup" aria-label="Selles" className="flex gap-2">
+            {BOWEL_OPTIONS.map(([val, label, glyph]) => (
+              <QuickTapButton
+                key={String(val)}
+                label={label}
+                glyph={glyph}
+                tone="neutral"
+                selected={bowelMovements === val}
+                onSelect={() => setBowelMovements((v) => (v === val ? null : val))}
+              />
+            ))}
+          </div>
+          {bowelMovements !== null && (
+            <textarea
+              rows={2}
+              placeholder="Remarques sur les selles (facultatif)"
+              value={bowelNote}
+              onChange={(e) => setBowelNote(e.target.value)}
+              className="mt-2 w-full bg-surface border border-line rounded-lg px-3 py-2 text-sm text-ink placeholder:text-ink-mute focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-1 focus:ring-offset-bg resize-none"
+            />
+          )}
         </div>
 
         {/* Note vocale — hidden when Web Speech API is unavailable */}

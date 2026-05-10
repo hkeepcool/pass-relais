@@ -19,6 +19,8 @@ export interface Observation {
   appetite: 'normal' | 'low' | 'refused' | null
   pain: 1 | 2 | 3 | 4 | 5 | null
   mood: 'stable' | 'confused' | 'anxious' | null
+  bowel_movements: 0 | 1 | 2 | 3 | null
+  bowel_note: string | null
   note_text: string | null
   note_audio_url: string | null
   status_color: 'green' | 'orange' | 'red'
