@@ -54,6 +54,11 @@ describe('summarizeObservations', () => {
     expect(r.text).toMatch(/douleur 4\/5/i)
   })
 
+  it('includes pain 1/5 in text', () => {
+    const r = summarizeObservations([mkObs({ pain: 1 })])
+    expect(r.text).toMatch(/douleur 1\/5/i)
+  })
+
   it('uses most-recent value when multiple observations exist', () => {
     const earlier = mkObs({ id: 'o1', recorded_at: new Date(Date.now() - 60 * 60 * 1000).toISOString(), sleep: 'agitated' })
     const latest  = mkObs({ id: 'o2', recorded_at: now, sleep: 'rested' })

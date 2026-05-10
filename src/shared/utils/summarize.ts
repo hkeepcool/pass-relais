@@ -35,10 +35,10 @@ export function summarizeObservations(
   const latestMood     = sorted.find((o) => o.mood     != null)?.mood     ?? null
 
   const parts: string[] = []
-  if (latestSleep)    parts.push(SLEEP_LABELS[latestSleep])
-  if (latestAppetite) parts.push(APPETITE_LABELS[latestAppetite])
-  if (latestPain)     parts.push(`Douleur ${latestPain}/5`)
-  if (latestMood)     parts.push(MOOD_LABELS[latestMood])
+  if (latestSleep != null)    parts.push(SLEEP_LABELS[latestSleep])
+  if (latestAppetite != null) parts.push(APPETITE_LABELS[latestAppetite])
+  if (latestPain != null)     parts.push(`Douleur ${latestPain}/5`)
+  if (latestMood != null)     parts.push(MOOD_LABELS[latestMood])
 
   const worstColor = recent.reduce<'red' | 'orange' | 'green'>((worst, o) => {
     if (o.status_color === 'red') return 'red'
