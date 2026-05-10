@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { FeedEntry, Button, Badge } from '../../design-system'
 import type { FeedMetric } from '../../design-system'
@@ -18,6 +18,7 @@ function buildText(obs: Observation): string {
   else if (obs.sleep === 'rested')     parts.push('Sommeil reposé')
   if (obs.appetite === 'low')          parts.push('appétit faible')
   else if (obs.appetite === 'refused') parts.push('alimentation refusée')
+  else if (obs.appetite === 'normal')  parts.push('appétit normal')
   if (obs.pain != null)                parts.push(`douleur ${obs.pain}/5`)
   if (obs.mood === 'confused')         parts.push('état confusionnel')
   else if (obs.mood === 'anxious')     parts.push('anxieux')
@@ -39,7 +40,7 @@ function formatTime(iso: string): string {
 }
 
 function initials(name: string): string {
-  return name.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase()
+  return name.split(' ').flatMap((w) => (w[0] ? [w[0]] : [])).slice(0, 2).join('').toUpperCase()
 }
 
 function applyFilter(obs: Observation[], filter: FilterKey): Observation[] {
@@ -66,23 +67,48 @@ export function FeedPage() {
   const [isLoading,    setIsLoading]    = useState(true)
 
   const load = useCallback(async () => {
-    setIsLoading(true)
     const [obs, patient] = await Promise.all([
       getObservationsByPatient(id),
       getPatient(id),
     ])
-    setObservations([...obs].sort((a, b) => b.recorded_at.localeCompare(a.recorded_at)))
-    setPatientName(patient?.full_name ?? '')
-    setIsLoading(false)
+    return { obs, patient }
   }, [id])
 
   useEffect(() => {
+    let ignored = false
+    setIsLoading(true)
+
     load()
-    window.addEventListener('sync:complete', load)
-    return () => window.removeEventListener('sync:complete', load)
+      .then(({ obs, patient }) => {
+        if (!ignored) {
+          setObservations([...obs].sort((a, b) => b.recorded_at.localeCompare(a.recorded_at)))
+          setPatientName(patient?.full_name ?? '')
+          setIsLoading(false)
+        }
+      })
+      .catch(() => {
+        if (!ignored) setIsLoading(false)
+      })
+
+    const onSync = () => {
+      load()
+        .then(({ obs, patient }) => {
+          if (!ignored) {
+            setObservations([...obs].sort((a, b) => b.recorded_at.localeCompare(a.recorded_at)))
+            setPatientName(patient?.full_name ?? '')
+          }
+        })
+        .catch(() => {})
+    }
+
+    window.addEventListener('sync:complete', onSync)
+    return () => {
+      ignored = true
+      window.removeEventListener('sync:complete', onSync)
+    }
   }, [load])
 
-  const summary  = summarizeObservations(observations)
+  const summary = useMemo(() => summarizeObservations(observations), [observations])
   const filtered = applyFilter(observations, filter)
 
   return (
