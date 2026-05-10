@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { supabase } from '../../lib/supabase'
 import { saveSession, getSession, clearSession, isSessionValid } from '../../shared/db/session-cache.db'
+import { pullFromSupabase } from '../../shared/sync/pull'
 
 export type AuthState = 'loading' | 'authenticated' | 'unauthenticated'
 
@@ -23,6 +24,7 @@ export function useAuth() {
             refresh_token: data.session.refresh_token,
             expires_at: data.session.expires_at ?? 0,
           })
+          void pullFromSupabase()
           return
         }
         const cached = await getSession()
