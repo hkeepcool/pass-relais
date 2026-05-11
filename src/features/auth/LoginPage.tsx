@@ -1,14 +1,15 @@
+// src/features/auth/LoginPage.tsx
 import { useState } from 'react'
 import { supabase } from '../../lib/supabase'
+import { Button } from '../../design-system'
 
 export function LoginPage() {
-  const [email, setEmail] = useState('')
-  const [sent, setSent] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [email,   setEmail]   = useState('')
+  const [sent,    setSent]    = useState(false)
+  const [error,   setError]   = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const sendOtp = async () => {
     setLoading(true)
     setError(null)
     const { error: err } = await supabase.auth.signInWithOtp({
@@ -16,49 +17,78 @@ export function LoginPage() {
       options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
     })
     setLoading(false)
-    if (err) {
-      setError(err.message)
-    } else {
-      setSent(true)
-    }
+    if (err) setError(err.message)
+    else setSent(true)
   }
 
-  if (sent) {
-    return (
-      <div className="flex min-h-screen items-center justify-center p-6">
-        <div className="text-center">
-          <h1 className="text-2xl font-semibold">Vérifiez votre email</h1>
-          <p className="mt-2 text-gray-600">
-            Un lien de connexion a été envoyé à <strong>{email}</strong>.
-          </p>
-        </div>
-      </div>
-    )
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    await sendOtp()
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-6">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
-        <h1 className="text-2xl font-semibold">Pass-Relais</h1>
-        <p className="text-gray-600">Entrez votre email pour vous connecter.</p>
-        <input
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="votre@email.fr"
-          className="w-full rounded-lg border px-4 py-3 text-lg"
-          aria-label="Adresse email"
-        />
-        {error && <p className="text-red-600 text-sm">{error}</p>}
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-lg bg-blue-600 py-3 text-lg font-medium text-white disabled:opacity-50"
-        >
-          {loading ? 'Envoi…' : 'Recevoir le lien'}
-        </button>
-      </form>
+    <div className="flex min-h-screen items-center justify-center bg-bg p-6">
+      <div className="flex w-full max-w-sm flex-col items-center">
+        <span className="font-mono text-[10px] font-bold text-accent tracking-widest mb-1">
+          PASS·RELAIS
+        </span>
+        <p className="text-xs text-ink-mute tracking-wide mb-6">
+          Transmissions infirmières
+        </p>
+
+        <div className="w-full bg-surface border border-line rounded-2xl p-6">
+          {sent ? (
+            <div className="flex flex-col items-center gap-3 text-center">
+              <span className="text-4xl" aria-hidden="true">✉️</span>
+              <h1 className="font-display text-xl font-semibold text-ink">
+                Vérifiez votre email
+              </h1>
+              <p className="text-sm text-ink-2 leading-relaxed">
+                Un lien de connexion a été envoyé à{' '}
+                <span className="text-accent font-semibold">{email}</span>.
+              </p>
+              <div className="w-full border-t border-line my-1" />
+              <button
+                type="button"
+                onClick={sendOtp}
+                className="text-xs text-ink-mute underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                Renvoyer le lien
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <h1 className="font-display text-xl font-semibold text-ink">Connexion</h1>
+                <p className="mt-1 text-sm text-ink-2">
+                  Entrez votre email pour vous connecter.
+                </p>
+              </div>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="votre@email.fr"
+                aria-label="Adresse email"
+                className="w-full rounded-xl bg-bg border border-line px-4 py-3 text-base text-ink placeholder:text-ink-mute focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-1 focus:ring-offset-bg"
+              />
+              {error && (
+                <p className="text-sm text-status-alert">{error}</p>
+              )}
+              <Button
+                type="submit"
+                variant="accent"
+                size="lg"
+                fullWidth
+                loading={loading}
+              >
+                Recevoir le lien
+              </Button>
+            </form>
+          )}
+        </div>
+      </div>
     </div>
   )
 }
