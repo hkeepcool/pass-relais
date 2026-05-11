@@ -21,6 +21,7 @@ export function ConflictToast() {
       <p className="flex-1 text-sm text-ink leading-relaxed">{message}</p>
       <button
         type="button"
+        aria-label="Ignorer le conflit"
         onClick={() => clearConflict(first.id)}
         className="text-sm font-semibold text-accent shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
       >

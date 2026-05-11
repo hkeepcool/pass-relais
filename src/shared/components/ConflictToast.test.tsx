@@ -34,14 +34,14 @@ describe('ConflictToast', () => {
   it('removes the first conflict from the store when OK is tapped', async () => {
     useAppStore.setState({ conflicts: [c1] })
     render(<ConflictToast />)
-    await userEvent.click(screen.getByRole('button', { name: /ok/i }))
+    await userEvent.click(screen.getByRole('button', { name: /ignorer le conflit/i }))
     expect(useAppStore.getState().conflicts).toHaveLength(0)
   })
 
   it('removes only the first conflict when multiple exist and OK is tapped', async () => {
     useAppStore.setState({ conflicts: [c1, c2] })
     render(<ConflictToast />)
-    await userEvent.click(screen.getByRole('button', { name: /ok/i }))
+    await userEvent.click(screen.getByRole('button', { name: /ignorer le conflit/i }))
     const remaining = useAppStore.getState().conflicts
     expect(remaining).toHaveLength(1)
     expect(remaining[0]?.id).toBe('c2')
