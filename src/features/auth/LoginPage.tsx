@@ -51,7 +51,8 @@ export function LoginPage() {
               <button
                 type="button"
                 onClick={sendOtp}
-                className="text-xs text-ink-mute underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                disabled={loading}
+                className="text-xs text-ink-mute underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent disabled:opacity-45 disabled:cursor-not-allowed"
               >
                 Renvoyer le lien
               </button>
