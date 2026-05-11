@@ -6,9 +6,6 @@ import { PatientListPage } from './PatientListPage'
 import type { PatientWithStatus } from './usePatients'
 
 vi.mock('./usePatients')
-vi.mock('../../shared/components/SyncIndicator', () => ({
-  SyncIndicator: () => null,
-}))
 
 import { usePatients } from './usePatients'
 const mockUsePatients = vi.mocked(usePatients)
