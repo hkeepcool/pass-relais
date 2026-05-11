@@ -6,11 +6,7 @@ import { useSyncQueue } from '../shared/hooks/useSyncQueue'
 
 function AppMain() {
   useSyncQueue()
-  return (
-    <main>
-      <Router />
-    </main>
-  )
+  return <Router />
 }
 
 export function App() {
