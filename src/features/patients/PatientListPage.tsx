@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { usePatients } from './usePatients'
 import { PatientCard } from '../../design-system'
-import { SyncIndicator } from '../../shared/components/SyncIndicator'
 import { formatRelativeTime } from '../../shared/utils/time'
 
 export function PatientListPage() {
@@ -10,9 +9,8 @@ export function PatientListPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-bg">
-      <header className="flex items-center justify-between px-4 py-3 border-b border-line-soft">
+      <header className="flex items-center px-4 py-3 border-b border-line-soft">
         <h1 className="font-display text-xl font-semibold text-ink">Mes patients</h1>
-        <SyncIndicator />
       </header>
 
       <main className="flex-1 px-4 py-4 space-y-3">

@@ -1,7 +1,9 @@
+// src/app/Router.tsx
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { LoginPage } from '../features/auth/LoginPage'
 import { AuthCallbackPage } from '../features/auth/AuthCallbackPage'
 import { AuthGuard } from '../features/auth/AuthGuard'
+import { AppShell } from './AppShell'
 import { PatientListPage } from '../features/patients/PatientListPage'
 import { PatientDetailPage } from '../features/patients/PatientDetailPage'
 import { FeedPage } from '../features/transmissions/FeedPage'
@@ -16,7 +18,9 @@ export function Router() {
         path="/patients"
         element={
           <AuthGuard>
-            <PatientListPage />
+            <AppShell>
+              <PatientListPage />
+            </AppShell>
           </AuthGuard>
         }
       />
@@ -24,7 +28,9 @@ export function Router() {
         path="/patients/:id"
         element={
           <AuthGuard>
-            <PatientDetailPage />
+            <AppShell>
+              <PatientDetailPage />
+            </AppShell>
           </AuthGuard>
         }
       />
@@ -32,7 +38,9 @@ export function Router() {
         path="/patients/:id/feed"
         element={
           <AuthGuard>
-            <FeedPage />
+            <AppShell>
+              <FeedPage />
+            </AppShell>
           </AuthGuard>
         }
       />
