@@ -31,4 +31,22 @@ describe('LoginPage', () => {
     await userEvent.click(screen.getByRole('button', { name: /lien/i }))
     expect(await screen.findByText('Rate limit')).toBeInTheDocument()
   })
+
+  it('disables resend link while OTP request is in-flight', async () => {
+    mockSendMagicLink.mockResolvedValue({ error: null })
+    render(<LoginPage />)
+    await userEvent.type(screen.getByRole('textbox', { name: /email/i }), 'test@example.com')
+    await userEvent.click(screen.getByRole('button', { name: /lien/i }))
+    await screen.findByText(/vérifiez votre email/i)
+
+    let resolve!: () => void
+    mockSendMagicLink.mockReturnValue(new Promise<{ error: null }>((r) => { resolve = () => r({ error: null }) }))
+
+    const resend = screen.getByRole('button', { name: /renvoyer/i })
+    await userEvent.click(resend)
+    expect(resend).toBeDisabled()
+
+    resolve()
+    await vi.waitFor(() => expect(resend).not.toBeDisabled())
+  })
 })
