@@ -34,30 +34,30 @@ function SectionLabel({ children }: { children: string }) {
   )
 }
 
-const SLEEP_OPTIONS: [SleepValue, string, ReactNode, TapTone][] = [
-  ['rested',   'Reposé',   <Moon    size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'ok'],
-  ['agitated', 'Agité',    <Waves   size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'warn'],
-  ['insomnia', 'Insomnie', <EyeOff  size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'alert'],
+const SLEEP_OPTIONS: [SleepValue, string, () => ReactNode, TapTone][] = [
+  ['rested',   'Reposé',   () => <Moon    size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'ok'],
+  ['agitated', 'Agité',    () => <Waves   size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'warn'],
+  ['insomnia', 'Insomnie', () => <EyeOff  size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'alert'],
 ]
 
-const APPETITE_OPTIONS: [AppetiteValue, string, ReactNode, TapTone][] = [
-  ['normal',  'Normal', <Utensils    size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'ok'],
-  ['low',     'Faible', <MinusCircle size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'warn'],
-  ['refused', 'Refus',  <XCircle     size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'alert'],
+const APPETITE_OPTIONS: [AppetiteValue, string, () => ReactNode, TapTone][] = [
+  ['normal',  'Normal', () => <Utensils    size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'ok'],
+  ['low',     'Faible', () => <MinusCircle size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'warn'],
+  ['refused', 'Refus',  () => <XCircle     size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'alert'],
 ]
 
-const MOOD_OPTIONS: [MoodValue, string, ReactNode, TapTone][] = [
-  ['stable',   'Stable',  <Check      size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'ok'],
-  ['confused', 'Confus',  <HelpCircle size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'warn'],
-  ['anxious',  'Anxieux', <Activity   size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'warn'],
+const MOOD_OPTIONS: [MoodValue, string, () => ReactNode, TapTone][] = [
+  ['stable',   'Stable',  () => <Check      size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'ok'],
+  ['confused', 'Confus',  () => <HelpCircle size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'warn'],
+  ['anxious',  'Anxieux', () => <Activity   size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'warn'],
 ]
 
-const PAIN_GLYPHS: Record<number, ReactNode> = {
-  1: <Smile size={ICON_SIZE} strokeWidth={ICON_STROKE} />,
-  2: <Smile size={ICON_SIZE} strokeWidth={ICON_STROKE} />,
-  3: <Meh   size={ICON_SIZE} strokeWidth={ICON_STROKE} />,
-  4: <Frown size={ICON_SIZE} strokeWidth={ICON_STROKE} />,
-  5: <Frown size={ICON_SIZE} strokeWidth={ICON_STROKE} />,
+const PAIN_GLYPHS: Record<number, () => ReactNode> = {
+  1: () => <Smile size={ICON_SIZE} strokeWidth={ICON_STROKE} />,
+  2: () => <Smile size={ICON_SIZE} strokeWidth={ICON_STROKE} />,
+  3: () => <Meh   size={ICON_SIZE} strokeWidth={ICON_STROKE} />,
+  4: () => <Frown size={ICON_SIZE} strokeWidth={ICON_STROKE} />,
+  5: () => <Frown size={ICON_SIZE} strokeWidth={ICON_STROKE} />,
 }
 
 const PAIN_SUBLABELS: Partial<Record<number, string>> = { 1: 'Légère', 3: 'Modérée', 5: 'Sévère' }
@@ -133,7 +133,7 @@ export function PatientDetailPage() {
               <QuickTapButton
                 key={String(val)}
                 label={label}
-                glyph={glyph}
+                glyph={glyph()}
                 tone={tone}
                 selected={sleep === val}
                 onSelect={() => setSleep((v) => (v === val ? null : val))}
@@ -150,7 +150,7 @@ export function PatientDetailPage() {
               <QuickTapButton
                 key={String(val)}
                 label={label}
-                glyph={glyph}
+                glyph={glyph()}
                 tone={tone}
                 selected={appetite === val}
                 onSelect={() => setAppetite((v) => (v === val ? null : val))}
@@ -167,7 +167,7 @@ export function PatientDetailPage() {
               <QuickTapButton
                 key={val}
                 label={String(val)}
-                glyph={PAIN_GLYPHS[val]}
+                glyph={PAIN_GLYPHS[val]!()}
                 sublabel={PAIN_SUBLABELS[val]}
                 tone={PAIN_TONES[val]}
                 selected={pain === val}
@@ -185,7 +185,7 @@ export function PatientDetailPage() {
               <QuickTapButton
                 key={String(val)}
                 label={label}
-                glyph={glyph}
+                glyph={glyph()}
                 tone={tone}
                 selected={mood === val}
                 onSelect={() => setMood((v) => (v === val ? null : val))}

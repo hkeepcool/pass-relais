@@ -88,7 +88,7 @@ export function QuickTapButton({
         <span
           aria-hidden="true"
           className={[
-            'font-display italic text-2xl leading-none',
+            'font-display text-2xl leading-none',
             selected ? '' : 'opacity-80 text-ink-2',
           ].filter(Boolean).join(' ')}
         >
