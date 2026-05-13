@@ -38,7 +38,24 @@
       "Bash(node /tmp/test-edge-cases2.mjs)",
       "Bash(npm run *)",
       "Bash(git checkout *)",
-      "Bash(git pull *)"
+      "Bash(git pull *)",
+      "Bash(dir C:\\\\Projets\\\\ReactProjects\\\\Pass_Relais\\\\src\\\\shared\\\\utils *)",
+      "Bash(git show *)",
+      "Bash(cat src/shared/utils/status.ts)",
+      "Bash(find src *)",
+      "Bash(cat src/shared/db/schema.ts)",
+      "Bash(node -e \"const ts = require\\('typescript'\\); const lib = ts.sys.readFile\\('./node_modules/typescript/lib/lib.dom.d.ts'\\); console.log\\(lib ? lib.indexOf\\('SpeechRecognition'\\) > -1 : 'not found'\\)\")",
+      "Bash(node -e \"const fs = require\\('fs'\\); const d = fs.readFileSync\\('./node_modules/typescript/lib/lib.dom.d.ts', 'utf8'\\); const idx = d.indexOf\\('interface SpeechRecognition'\\); console.log\\(d.substring\\(idx, idx+200\\)\\)\")",
+      "Bash(node -e \"const fs = require\\('fs'\\); const d = fs.readFileSync\\('./node_modules/typescript/lib/lib.dom.d.ts', 'utf8'\\); const matches = [...d.matchAll\\(/interface SpeechRecognition\\\\b/g\\)]; matches.forEach\\(m => console.log\\(m.index, d.substring\\(m.index, m.index + 150\\)\\)\\)\")",
+      "Bash(node -e \"const fs = require\\('fs'\\); const d = fs.readFileSync\\('./node_modules/typescript/lib/lib.dom.d.ts', 'utf8'\\); const count = \\(d.match\\(/SpeechRecognition/g\\) || []\\).length; console.log\\('occurrences:', count\\); const idx = d.indexOf\\('SpeechRecognition'\\); console.log\\('first:', d.substring\\(idx-20, idx+200\\)\\)\")",
+      "Bash(git stash *)",
+      "Bash(Select-Object Name)",
+      "Bash(git push *)",
+      "Bash(ls *.md)",
+      "Bash(ls DESIGN_SYSTEM_PROMPT.md)",
+      "Bash(node -e \"const r = require\\('./node_modules/@types/react/index.d.ts'\\); console.log\\('exists'\\)\")",
+      "Bash(npm test *)",
+      "Bash(bash *)"
     ]
   },
   "enabledPlugins": {

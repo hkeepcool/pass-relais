@@ -32,33 +32,33 @@
 /* ── Dark (primary / default) ─────────────────────────────────────────── */
 :root,
 [data-theme="dark"] {
-  /* Surfaces — RGB channels for Tailwind opacity modifiers */
-  --bg-rgb:            10, 14, 20;
-  --bg-tint-rgb:       15, 20, 27;
-  --surface-rgb:       20, 27, 37;
-  --surface-2-rgb:     27, 36, 51;
-  --surface-inset-rgb: 14, 20, 28;
+  /* Surfaces — space-separated RGB channels for Tailwind opacity modifiers */
+  --bg-rgb:            10 14 20;
+  --bg-tint-rgb:       15 20 27;
+  --surface-rgb:       20 27 37;
+  --surface-2-rgb:     27 36 51;
+  --surface-inset-rgb: 14 20 28;
 
   /* Text */
-  --ink-rgb:      230, 237, 247;
-  --ink-2-rgb:    151, 164, 184;
-  --ink-mute-rgb: 92, 106, 126;
-  --ink-faint-rgb:52, 64, 80;
+  --ink-rgb:      230 237 247;
+  --ink-2-rgb:    151 164 184;
+  --ink-mute-rgb: 92 106 126;
+  --ink-faint-rgb:52 64 80;
 
   /* Structure */
-  --line-rgb:        31, 42, 59;
-  --line-soft-rgb:   22, 30, 42;
-  --line-strong-rgb: 44, 58, 82;
+  --line-rgb:        31 42 59;
+  --line-soft-rgb:   22 30 42;
+  --line-strong-rgb: 44 58 82;
 
   /* Accent — electric teal */
-  --accent-rgb:    45, 212, 191;
-  --accent-2-rgb:  94, 234, 212;
-  --on-accent-rgb: 4, 38, 34;
+  --accent-rgb:    45 212 191;
+  --accent-2-rgb:  94 234 212;
+  --on-accent-rgb: 4 38 34;
 
   /* Status */
-  --ok-rgb:    52, 211, 153;
-  --warn-rgb:  251, 191, 36;
-  --alert-rgb: 248, 113, 113;
+  --ok-rgb:    52 211 153;
+  --warn-rgb:  251 191 36;
+  --alert-rgb: 248 113 113;
 
   /* Shadows */
   --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
@@ -68,29 +68,29 @@
 
 /* ── Light ────────────────────────────────────────────────────────────── */
 [data-theme="light"] {
-  --bg-rgb:            244, 246, 249;
-  --bg-tint-rgb:       234, 238, 243;
-  --surface-rgb:       255, 255, 255;
-  --surface-2-rgb:     255, 255, 255;
-  --surface-inset-rgb: 238, 242, 246;
+  --bg-rgb:            244 246 249;
+  --bg-tint-rgb:       234 238 243;
+  --surface-rgb:       255 255 255;
+  --surface-2-rgb:     255 255 255;
+  --surface-inset-rgb: 238 242 246;
 
-  --ink-rgb:       10, 14, 20;
-  --ink-2-rgb:     71, 85, 105;
-  --ink-mute-rgb:  148, 163, 184;
-  --ink-faint-rgb: 203, 213, 224;
+  --ink-rgb:       10 14 20;
+  --ink-2-rgb:     71 85 105;
+  --ink-mute-rgb:  148 163 184;
+  --ink-faint-rgb: 203 213 224;
 
-  --line-rgb:        220, 227, 235;
-  --line-soft-rgb:   232, 237, 243;
-  --line-strong-rgb: 182, 192, 204;
+  --line-rgb:        220 227 235;
+  --line-soft-rgb:   232 237 243;
+  --line-strong-rgb: 182 192 204;
 
   /* Teal is darker in light mode for contrast */
-  --accent-rgb:    13, 148, 136;
-  --accent-2-rgb:  20, 184, 166;
-  --on-accent-rgb: 255, 255, 255;
+  --accent-rgb:    13 148 136;
+  --accent-2-rgb:  20 184 166;
+  --on-accent-rgb: 255 255 255;
 
-  --ok-rgb:    5, 150, 105;
-  --warn-rgb:  217, 119, 6;
-  --alert-rgb: 220, 38, 38;
+  --ok-rgb:    5 150 105;
+  --warn-rgb:  217 119 6;
+  --alert-rgb: 220 38 38;
 
   --shadow-1: 0 1px 2px rgba(10, 14, 20, 0.04);
   --shadow-2: 0 4px 12px rgba(10, 14, 20, 0.06), 0 1px 3px rgba(10, 14, 20, 0.04);

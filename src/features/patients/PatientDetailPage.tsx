@@ -1,5 +1,12 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import type { ReactNode } from 'react'
+import {
+  Moon, Waves, EyeOff,
+  Utensils, MinusCircle, XCircle,
+  Check, HelpCircle, Activity,
+  Smile, Meh, Frown,
+} from 'lucide-react'
 import { QuickTapButton, Button, VoiceButton } from '../../design-system'
 import type { TapTone, VoiceState } from '../../design-system'
 import { useTranscription } from '../../shared/hooks/useTranscription'
@@ -16,6 +23,9 @@ type BowelMovementsValue = Observation['bowel_movements']
 
 const adapter = new WebSpeechAdapter()
 
+const ICON_SIZE   = 22
+const ICON_STROKE = 1.75
+
 function SectionLabel({ children }: { children: string }) {
   return (
     <p className="text-xs font-semibold uppercase tracking-widest text-ink-mute mb-2">
@@ -24,33 +34,55 @@ function SectionLabel({ children }: { children: string }) {
   )
 }
 
-const SLEEP_OPTIONS: [SleepValue, string, string, TapTone][] = [
-  ['rested',   'Reposé',  '☾', 'ok'],
-  ['agitated', 'Agité',   '〜', 'warn'],
-  ['insomnia', 'Insomnie','◎', 'alert'],
+const SLEEP_OPTIONS: [SleepValue, string, ReactNode, TapTone][] = [
+  ['rested',   'Reposé',   <Moon    size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'ok'],
+  ['agitated', 'Agité',    <Waves   size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'warn'],
+  ['insomnia', 'Insomnie', <EyeOff  size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'alert'],
 ]
 
-const APPETITE_OPTIONS: [AppetiteValue, string, string, TapTone][] = [
-  ['normal',  'Normal', '◉', 'ok'],
-  ['low',     'Faible', '◌', 'warn'],
-  ['refused', 'Refus',  '✕', 'alert'],
+const APPETITE_OPTIONS: [AppetiteValue, string, ReactNode, TapTone][] = [
+  ['normal',  'Normal', <Utensils    size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'ok'],
+  ['low',     'Faible', <MinusCircle size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'warn'],
+  ['refused', 'Refus',  <XCircle     size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'alert'],
 ]
 
-const MOOD_OPTIONS: [MoodValue, string, string, TapTone][] = [
-  ['stable',   'Stable', '◆', 'ok'],
-  ['confused', 'Confus', '?', 'warn'],
-  ['anxious',  'Anxieux','!', 'warn'],
+const MOOD_OPTIONS: [MoodValue, string, ReactNode, TapTone][] = [
+  ['stable',   'Stable',  <Check      size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'ok'],
+  ['confused', 'Confus',  <HelpCircle size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'warn'],
+  ['anxious',  'Anxieux', <Activity   size={ICON_SIZE} strokeWidth={ICON_STROKE} />, 'warn'],
 ]
 
-const PAIN_GLYPHS:    Record<number, string>           = { 1: '●', 2: '●●', 3: '●●●', 4: '▲', 5: '⚠' }
-const PAIN_SUBLABELS: Partial<Record<number, string>>  = { 1: 'Légère', 3: 'Modérée', 5: 'Sévère' }
-const PAIN_TONES:     Record<number, TapTone>          = { 1: 'ok', 2: 'ok', 3: 'warn', 4: 'alert', 5: 'alert' }
+const PAIN_GLYPHS: Record<number, ReactNode> = {
+  1: <Smile size={ICON_SIZE} strokeWidth={ICON_STROKE} />,
+  2: <Smile size={ICON_SIZE} strokeWidth={ICON_STROKE} />,
+  3: <Meh   size={ICON_SIZE} strokeWidth={ICON_STROKE} />,
+  4: <Frown size={ICON_SIZE} strokeWidth={ICON_STROKE} />,
+  5: <Frown size={ICON_SIZE} strokeWidth={ICON_STROKE} />,
+}
 
-const BOWEL_OPTIONS: [BowelMovementsValue, string, string][] = [
-  [0, '0',  '—'],
-  [1, '1',  '①'],
-  [2, '2',  '②'],
-  [3, '3+', '③'],
+const PAIN_SUBLABELS: Partial<Record<number, string>> = { 1: 'Légère', 3: 'Modérée', 5: 'Sévère' }
+const PAIN_TONES:     Record<number, TapTone>         = { 1: 'ok', 2: 'ok', 3: 'warn', 4: 'alert', 5: 'alert' }
+
+// Dot-count SVGs for bowel movements — inline, no Lucide dependency
+const DOT_SVG = (dots: number): ReactNode => {
+  const cx = dots === 1 ? [12] : dots === 2 ? [7, 17] : [4, 12, 20]
+  const r  = dots === 1 ? 4 : dots === 2 ? 3.5 : 3
+  return (
+    <svg width={ICON_SIZE} height={ICON_SIZE} viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" strokeWidth={ICON_STROKE} strokeLinecap="round">
+      {dots === 0
+        ? <line x1="4" y1="12" x2="20" y2="12" />
+        : cx.map((x, i) => <circle key={i} cx={x} cy={12} r={r} />)
+      }
+    </svg>
+  )
+}
+
+const BOWEL_OPTIONS: [BowelMovementsValue, string, ReactNode][] = [
+  [0, '0',  DOT_SVG(0)],
+  [1, '1',  DOT_SVG(1)],
+  [2, '2',  DOT_SVG(2)],
+  [3, '3+', DOT_SVG(3)],
 ]
 
 export function PatientDetailPage() {
