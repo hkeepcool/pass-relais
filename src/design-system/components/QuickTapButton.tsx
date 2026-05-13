@@ -1,9 +1,11 @@
+import type { ReactNode } from 'react'
+
 export type TapTone = 'neutral' | 'ok' | 'warn' | 'alert'
 
 export interface QuickTapButtonProps {
   label:     string
   sublabel?: string   // secondary label, e.g. pain scale description "Légère"
-  glyph?:    string   // large decorative character/emoji, e.g. "☾", "≈"
+  glyph?:    ReactNode   // large decorative character/emoji/icon component
   selected?: boolean
   onSelect?: () => void
   tone?:     TapTone
