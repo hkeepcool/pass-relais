@@ -15,13 +15,15 @@ export type { ShiftWindow }
 export function usePdfExport(type: 'patient' | 'tour', patientId?: string) {
   const [isGenerating, setIsGenerating] = useState(false)
   const { session } = useAuth()
+  const userId      = session?.user?.id
+  const nurseName   = (session?.user.user_metadata?.full_name as string)
+    ?? session?.user.email
+    ?? 'Infirmier(ère)'
 
   const generate = useCallback(async (window: ShiftWindow) => {
+    if (type === 'patient' && !patientId) throw new Error('patientId required for patient export')
     setIsGenerating(true)
     try {
-      const nurseName   = (session?.user.user_metadata?.full_name as string | undefined)
-        ?? session?.user.email
-        ?? 'Infirmier(ère)'
       const since       = windowStart(window)
       const windowLabel = formatWindowLabel(window)
       const exportDate  = todayISO()
@@ -68,7 +70,7 @@ export function usePdfExport(type: 'patient' | 'tour', patientId?: string) {
     } finally {
       setIsGenerating(false)
     }
-  }, [type, patientId, session])
+  }, [type, patientId, userId, nurseName])
 
   return { generate, isGenerating }
 }
