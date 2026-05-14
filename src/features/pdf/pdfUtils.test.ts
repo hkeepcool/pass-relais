@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, afterEach } from 'vitest'
 import { windowStart, formatWindowLabel, toSlug, todayISO } from './pdfUtils'
 
 describe('windowStart', () => {
@@ -29,6 +29,10 @@ describe('toSlug', () => {
   it('removes non-alphanumeric characters', () => {
     expect(toSlug("O'Brien")).toBe('obrien')
   })
+
+  it('returns empty string for empty input', () => {
+    expect(toSlug('')).toBe('')
+  })
 })
 
 describe('todayISO', () => {
@@ -38,11 +42,20 @@ describe('todayISO', () => {
 })
 
 describe('formatWindowLabel', () => {
+  afterEach(() => vi.useRealTimers())
+
   it('returns a string containing an arrow', () => {
     expect(formatWindowLabel({ preset: 12 })).toContain('→')
   })
 
   it('accepts a since window', () => {
     expect(formatWindowLabel({ since: new Date() })).toContain('→')
+  })
+
+  it('formats as "Garde HH:MM → HH:MM" for preset window', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-05-15T14:30:00Z'))
+    const label = formatWindowLabel({ preset: 8 })
+    expect(label).toMatch(/^Garde \d{2}:\d{2} → \d{2}:\d{2}$/)
   })
 })

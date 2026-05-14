@@ -25,5 +25,5 @@ export function toSlug(name: string): string {
 }
 
 export function todayISO(): string {
-  return new Date().toISOString().split('T')[0]!
+  return new Date().toISOString().slice(0, 10)
 }
