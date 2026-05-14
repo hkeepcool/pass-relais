@@ -19,10 +19,10 @@ describe('sharePdf — share path', () => {
   it('calls navigator.share when canShare returns true', async () => {
     await sharePdf(blob, filename)
     expect(navigator.share).toHaveBeenCalledOnce()
-    const arg = vi.mocked(navigator.share).mock.calls[0][0]
+    const arg = vi.mocked(navigator.share).mock.calls[0]![0]!
     expect(arg.files).toHaveLength(1)
-    expect(arg.files[0].name).toBe(filename)
-    expect(arg.files[0].type).toBe('application/pdf')
+    expect(arg.files![0]!.name).toBe(filename)
+    expect(arg.files![0]!.type).toBe('application/pdf')
   })
 
   it('silently swallows AbortError', async () => {
@@ -58,7 +58,7 @@ describe('sharePdf — download fallback', () => {
     const origCreate = document.createElement.bind(document)
     vi.spyOn(document, 'createElement').mockImplementation((tag: string) => {
       const el = origCreate(tag)
-      if (tag === 'a') el.click = () => { clicks.push(el.download) }
+      if (tag === 'a') { const a = el as HTMLAnchorElement; a.click = () => { clicks.push(a.download) } }
       return el
     })
 

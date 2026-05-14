@@ -73,7 +73,7 @@ describe('usePdfExport — patient type', () => {
   it('passes only in-window observations to PatientReportDocument', async () => {
     const { result } = renderHook(() => usePdfExport('patient', 'p1'))
     await act(async () => { await result.current.generate({ preset: 8 }) })
-    const docProps = mockPdf.mock.calls[0]![0].props as { observations: Observation[] }
+    const docProps = mockPdf.mock.calls[0]![0]!.props as { observations: Observation[] }
     expect(docProps.observations).toHaveLength(1)
     expect(docProps.observations[0]!.id).toBe('o1')
   })
@@ -82,7 +82,7 @@ describe('usePdfExport — patient type', () => {
     const since = new Date(Date.now() - 3 * 3_600_000) // 3h ago — only o1 qualifies
     const { result } = renderHook(() => usePdfExport('patient', 'p1'))
     await act(async () => { await result.current.generate({ since }) })
-    const docProps = mockPdf.mock.calls[0]![0].props as { observations: Observation[] }
+    const docProps = mockPdf.mock.calls[0]![0]!.props as { observations: Observation[] }
     expect(docProps.observations).toHaveLength(1)
   })
 
@@ -107,7 +107,7 @@ describe('usePdfExport — tour type', () => {
   it('excludes patients with no observations in the window', async () => {
     const { result } = renderHook(() => usePdfExport('tour'))
     await act(async () => { await result.current.generate({ preset: 8 }) })
-    const docProps = mockPdf.mock.calls[0]![0].props as { patientSummaries: PatientSummary[] }
+    const docProps = mockPdf.mock.calls[0]![0]!.props as { patientSummaries: PatientSummary[] }
     expect(docProps.patientSummaries).toHaveLength(1)
     expect(docProps.patientSummaries[0]!.patient.id).toBe('p1')
   })
