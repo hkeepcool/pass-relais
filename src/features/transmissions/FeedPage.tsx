@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { FeedEntry, Button, Badge } from '../../design-system'
+import { ExportModal } from '../pdf'
 import type { FeedMetric } from '../../design-system'
 import { getObservationsByPatient } from '../../shared/db/observations.db'
 import { getPatient } from '../../shared/db/patients.db'
@@ -70,6 +71,7 @@ export function FeedPage() {
   const [patientName,  setPatientName]  = useState('')
   const [filter,       setFilter]       = useState<FilterKey>('all')
   const [isLoading,    setIsLoading]    = useState(true)
+  const [exportOpen, setExportOpen] = useState(false)
 
   const load = useCallback(async () => {
     const [obs, patient] = await Promise.all([
@@ -125,6 +127,11 @@ export function FeedPage() {
         <h1 className="font-display text-xl font-semibold text-ink flex-1 truncate">
           {patientName}
         </h1>
+        {!isLoading && (
+          <Button variant="ghost" size="sm" onClick={() => setExportOpen(true)}>
+            PDF
+          </Button>
+        )}
         <Button variant="accent" size="sm" onClick={() => navigate(`/patients/${id}`)}>
           + Obs.
         </Button>
@@ -194,6 +201,13 @@ export function FeedPage() {
           )
         })}
       </main>
+      {exportOpen && (
+        <ExportModal
+          type="patient"
+          patientId={id}
+          onClose={() => setExportOpen(false)}
+        />
+      )}
     </div>
   )
 }

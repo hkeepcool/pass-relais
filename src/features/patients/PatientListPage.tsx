@@ -1,16 +1,22 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { usePatients } from './usePatients'
-import { PatientCard } from '../../design-system'
+import { PatientCard, Button } from '../../design-system'
 import { formatRelativeTime } from '../../shared/utils/time'
+import { ExportModal } from '../pdf'
 
 export function PatientListPage() {
   const navigate = useNavigate()
   const { patients, isLoading, error, reload } = usePatients()
+  const [exportOpen, setExportOpen] = useState(false)
 
   return (
     <div className="flex flex-col min-h-screen bg-bg">
-      <header className="flex items-center px-4 py-3 border-b border-line-soft">
+      <header className="flex items-center justify-between px-4 py-3 border-b border-line-soft">
         <h1 className="font-display text-xl font-semibold text-ink">Mes patients</h1>
+        <Button variant="ghost" size="sm" onClick={() => setExportOpen(true)}>
+          Rapport PDF
+        </Button>
       </header>
 
       <main className="flex-1 px-4 py-4 space-y-3">
@@ -54,6 +60,12 @@ export function PatientListPage() {
           />
         ))}
       </main>
+      {exportOpen && (
+        <ExportModal
+          type="tour"
+          onClose={() => setExportOpen(false)}
+        />
+      )}
     </div>
   )
 }
