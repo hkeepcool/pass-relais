@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { sharePdf } from './sharePdf'
 
 const blob = new Blob(['%PDF'], { type: 'application/pdf' })
@@ -12,10 +12,14 @@ describe('sharePdf — share path', () => {
     })
   })
 
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
   it('calls navigator.share when canShare returns true', async () => {
     await sharePdf(blob, filename)
     expect(navigator.share).toHaveBeenCalledOnce()
-    const arg = (navigator.share as ReturnType<typeof vi.fn>).mock.calls[0][0]
+    const arg = vi.mocked(navigator.share).mock.calls[0][0]
     expect(arg.files).toHaveLength(1)
     expect(arg.files[0].name).toBe(filename)
     expect(arg.files[0].type).toBe('application/pdf')
@@ -23,13 +27,13 @@ describe('sharePdf — share path', () => {
 
   it('silently swallows AbortError', async () => {
     const abort = new DOMException('user cancelled', 'AbortError')
-    ;(navigator.share as ReturnType<typeof vi.fn>).mockRejectedValueOnce(abort)
+    vi.mocked(navigator.share).mockRejectedValueOnce(abort)
     await expect(sharePdf(blob, filename)).resolves.toBeUndefined()
   })
 
   it('rethrows non-abort errors', async () => {
     const err = new DOMException('not allowed', 'NotAllowedError')
-    ;(navigator.share as ReturnType<typeof vi.fn>).mockRejectedValueOnce(err)
+    vi.mocked(navigator.share).mockRejectedValueOnce(err)
     await expect(sharePdf(blob, filename)).rejects.toThrow('not allowed')
   })
 })
@@ -43,6 +47,10 @@ describe('sharePdf — download fallback', () => {
       createObjectURL: vi.fn().mockReturnValue('blob:fake'),
       revokeObjectURL: vi.fn(),
     })
+  })
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
   })
 
   it('creates and clicks a download link when canShare is false', async () => {
