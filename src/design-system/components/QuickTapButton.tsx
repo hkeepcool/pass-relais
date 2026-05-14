@@ -103,7 +103,7 @@ export function QuickTapButton({
 
       {/* Sublabel — always rendered to keep all buttons the same height */}
       <span className={['text-[11px] font-medium text-ink-mute', !sublabel && 'invisible'].filter(Boolean).join(' ')}>
-        {sublabel}
+        {sublabel ?? '\u00A0'}
       </span>
     </button>
   )
