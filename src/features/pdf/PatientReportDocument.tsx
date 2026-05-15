@@ -1,6 +1,7 @@
 import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer'
 import type { Patient, Observation } from '../../shared/db/schema'
 import { summarizeObservations } from '../../shared/utils/summarize'
+import { STATUS_LABELS } from '../../shared/utils/status'
 
 export interface PatientReportProps {
   patient:      Patient
@@ -53,7 +54,6 @@ const S = StyleSheet.create({
 
 const STATUS_BG:    Record<string, string> = { green: C.green,   orange: C.orange,   red: C.red   }
 const STATUS_FG:    Record<string, string> = { green: C.greenFg, orange: C.orangeFg, red: C.redFg }
-const STATUS_LABEL: Record<string, string> = { green: 'VERT',    orange: 'ORANGE',   red: 'ROUGE' }
 const SLEEP_FR:  Record<string, string> = { rested: 'Reposé',  agitated: 'Agité',   insomnia: 'Insomnie' }
 const APP_FR:    Record<string, string> = { normal: 'Normal',  low: 'Faible',       refused: 'Refus'     }
 const MOOD_FR:   Record<string, string> = { stable: 'Stable',  confused: 'Confus',  anxious: 'Anxieux'   }
@@ -93,11 +93,13 @@ export function PatientReportDocument({
 
         {/* Badge strip */}
         <View style={S.badgeStrip}>
-          <View style={[S.chip, { backgroundColor: STATUS_BG[statusColor] }]}>
-            <Text style={{ fontSize: 9, color: STATUS_FG[statusColor] }}>
-              {STATUS_LABEL[statusColor]}
-            </Text>
-          </View>
+          {STATUS_LABELS[statusColor] != null && (
+            <View style={[S.chip, { backgroundColor: STATUS_BG[statusColor] }]}>
+              <Text style={{ fontSize: 9, color: STATUS_FG[statusColor] }}>
+                {STATUS_LABELS[statusColor]}
+              </Text>
+            </View>
+          )}
           {lastPain != null && (
             <View style={[S.chip, S.chipMuted]}>
               <Text style={S.chipMutedFg}>Douleur {lastPain}/5</Text>
