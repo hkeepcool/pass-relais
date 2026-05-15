@@ -15,3 +15,9 @@ export function deriveStatusColor(
   if (fields.pain === 4 || fields.mood === 'confused' || fields.mood === 'anxious') return 'orange'
   return 'green'
 }
+
+export const STATUS_LABELS: Record<'green' | 'orange' | 'red', string | null> = {
+  green:  null,
+  orange: 'Vigilance',
+  red:    'Urgent',
+}

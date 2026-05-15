@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { colorToTone, deriveStatusColor } from './status'
+import { colorToTone, deriveStatusColor, STATUS_LABELS } from './status'
 
 describe('colorToTone', () => {
   it('maps red → alert',       () => expect(colorToTone('red')).toBe('alert'))
@@ -16,4 +16,10 @@ describe('deriveStatusColor', () => {
   it('returns orange when mood is anxious',     () => expect(deriveStatusColor({ pain: null, mood: 'anxious'  })).toBe('orange'))
   it('returns green for normal values',         () => expect(deriveStatusColor({ pain: 2,    mood: 'stable'   })).toBe('green'))
   it('returns green when all fields are null',  () => expect(deriveStatusColor({ pain: null, mood: null       })).toBe('green'))
+})
+
+describe('STATUS_LABELS', () => {
+  it('returns null for green',        () => expect(STATUS_LABELS.green).toBeNull())
+  it('returns Vigilance for orange',  () => expect(STATUS_LABELS.orange).toBe('Vigilance'))
+  it('returns Urgent for red',        () => expect(STATUS_LABELS.red).toBe('Urgent'))
 })
