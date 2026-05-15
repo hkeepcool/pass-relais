@@ -6,7 +6,7 @@ import type { FeedMetric } from '../../design-system'
 import { getObservationsByPatient } from '../../shared/db/observations.db'
 import { getPatient } from '../../shared/db/patients.db'
 import { summarizeObservations } from '../../shared/utils/summarize'
-import { colorToTone } from '../../shared/utils/status'
+import { colorToTone, STATUS_LABELS } from '../../shared/utils/status'
 import { useAuth } from '../auth/useAuth'
 import type { Observation } from '../../shared/db/schema'
 
@@ -189,10 +189,8 @@ export function FeedPage() {
               text={buildText(obs)}
               status={colorToTone(obs.status_color)}
               tag={
-                obs.status_color === 'red'
-                  ? { label: 'Urgent',    status: 'alert' }
-                  : obs.status_color === 'orange'
-                  ? { label: 'Vigilance', status: 'warn'  }
+                STATUS_LABELS[obs.status_color] != null
+                  ? { label: STATUS_LABELS[obs.status_color]!, status: colorToTone(obs.status_color) }
                   : undefined
               }
               metrics={buildMetrics(obs)}

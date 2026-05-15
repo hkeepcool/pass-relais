@@ -82,4 +82,27 @@ describe('FeedPage', () => {
     expect(screen.getByText(/note importante/i)).toBeInTheDocument()
     expect(screen.queryByText(/sommeil agité/i)).not.toBeInTheDocument()
   })
+
+  it('shows Vigilance tag for orange observation', async () => {
+    await upsertPatient(patient)
+    await upsertObservation(mkObs({ status_color: 'orange' }))
+    renderPage()
+    expect(await screen.findByText('Vigilance')).toBeInTheDocument()
+  })
+
+  it('shows Urgent tag for red observation', async () => {
+    await upsertPatient(patient)
+    await upsertObservation(mkObs({ status_color: 'red', pain: 5 }))
+    renderPage()
+    expect(await screen.findByText('Urgent')).toBeInTheDocument()
+  })
+
+  it('shows no status tag for green observation', async () => {
+    await upsertPatient(patient)
+    await upsertObservation(mkObs({ status_color: 'green', note_text: 'Tout va bien' }))
+    renderPage()
+    await screen.findByText(/tout va bien/i)
+    expect(screen.queryByText('Vigilance')).not.toBeInTheDocument()
+    expect(screen.queryByText('Urgent')).not.toBeInTheDocument()
+  })
 })
