@@ -1,5 +1,6 @@
 import { Document, Page, View, Text, StyleSheet } from '@react-pdf/renderer'
 import type { Patient, Observation } from '../../shared/db/schema'
+import { STATUS_LABELS } from '../../shared/utils/status'
 
 export interface PatientSummary {
   patient:      Patient
@@ -47,7 +48,6 @@ const S = StyleSheet.create({
 
 const STATUS_BG:     Record<string, string> = { green: C.green,   orange: C.orange,   red: C.red   }
 const STATUS_FG:     Record<string, string> = { green: C.greenFg, orange: C.orangeFg, red: C.redFg }
-const STATUS_LABEL:  Record<string, string> = { green: 'VERT',    orange: 'ORANGE',   red: 'ROUGE' }
 const STATUS_BORDER: Record<string, string> = { green: '#22c55e', orange: '#f59e0b',  red: '#ef4444' }
 const SEVERITY:      Record<string, number> = { red: 0, orange: 1, green: 2 }
 const SLEEP_FR:  Record<string, string> = { rested: 'Reposé',  agitated: 'Agité',   insomnia: 'Insomnie' }
@@ -130,11 +130,13 @@ export function TourReportDocument({
                   <Text style={S.cardMeta}>{metaParts.join(' · ')}</Text>
                 )}
               </View>
-              <View style={[S.badge, { backgroundColor: STATUS_BG[color] }]}>
-                <Text style={[S.badgeText, { color: STATUS_FG[color] }]}>
-                  {STATUS_LABEL[color]}
-                </Text>
-              </View>
+              {STATUS_LABELS[color] != null && (
+                <View style={[S.badge, { backgroundColor: STATUS_BG[color] }]}>
+                  <Text style={[S.badgeText, { color: STATUS_FG[color] }]}>
+                    {STATUS_LABELS[color]}
+                  </Text>
+                </View>
+              )}
             </View>
           )
         })}
