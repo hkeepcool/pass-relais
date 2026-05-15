@@ -14,17 +14,17 @@ export interface TourReportProps {
 }
 
 const C = {
-  brand:    '#38bdf8',
-  bg:       '#0f172a',
-  surface:  '#1e293b',
-  border:   '#334155',
-  ink:      '#e2e8f0',
-  inkMute:  '#94a3b8',
-  green:    '#166534', greenFg:  '#bbf7d0',
-  orange:   '#92400e', orangeFg: '#fde68a',
-  red:      '#7f1d1d', redFg:    '#fca5a5',
-  redAlert: '#450a0a',
-  amber:    '#fbbf24',
+  brand:    '#0284c7',
+  bg:       '#ffffff',
+  surface:  '#f8fafc',
+  border:   '#e2e8f0',
+  ink:      '#0f172a',
+  inkMute:  '#64748b',
+  green:    '#dcfce7', greenFg:  '#166534',
+  orange:   '#fef3c7', orangeFg: '#92400e',
+  red:      '#fee2e2', redFg:    '#991b1b',
+  redAlert: '#fef2f2',
+  amber:    '#92400e',
 }
 
 const S = StyleSheet.create({
@@ -34,7 +34,7 @@ const S = StyleSheet.create({
   subtitle:     { fontSize: 9, color: C.inkMute },
   alertBox:     { backgroundColor: C.redAlert, borderRadius: 4, padding: 8, marginBottom: 10 },
   alertTitle:   { fontSize: 9, fontFamily: 'Helvetica-Bold', color: C.redFg, marginBottom: 4 },
-  alertRow:     { fontSize: 9, color: '#fecaca', marginBottom: 2 },
+  alertRow:     { fontSize: 9, color: '#b91c1c', marginBottom: 2 },
   sectionLabel: { fontSize: 8, fontFamily: 'Helvetica-Bold', color: C.inkMute, marginBottom: 6, letterSpacing: 0.5 },
   cardRow:      { flexDirection: 'row', alignItems: 'center', borderRadius: 4, borderLeftWidth: 3, padding: 7, marginBottom: 5 },
   cardName:     { fontSize: 10, fontFamily: 'Helvetica-Bold', flex: 1, color: C.ink },

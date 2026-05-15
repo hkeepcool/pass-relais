@@ -11,17 +11,17 @@ export interface PatientReportProps {
 }
 
 const C = {
-  brand:    '#38bdf8',
-  bg:       '#0f172a',
-  surface:  '#1e293b',
-  border:   '#334155',
-  ink:      '#e2e8f0',
-  inkMute:  '#94a3b8',
-  inkSub:   '#cbd5e1',
-  green:    '#166534', greenFg:  '#bbf7d0',
-  orange:   '#92400e', orangeFg: '#fde68a',
-  red:      '#7f1d1d', redFg:    '#fca5a5',
-  amber:    '#fbbf24',
+  brand:    '#0284c7',
+  bg:       '#ffffff',
+  surface:  '#f8fafc',
+  border:   '#e2e8f0',
+  ink:      '#0f172a',
+  inkMute:  '#64748b',
+  inkSub:   '#475569',
+  green:    '#dcfce7', greenFg:  '#166534',
+  orange:   '#fef3c7', orangeFg: '#92400e',
+  red:      '#fee2e2', redFg:    '#991b1b',
+  amber:    '#92400e',
 }
 
 const S = StyleSheet.create({
