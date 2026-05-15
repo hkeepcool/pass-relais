@@ -7,6 +7,7 @@ import { getObservationsByPatient } from '../../shared/db/observations.db'
 import { getPatient } from '../../shared/db/patients.db'
 import { summarizeObservations } from '../../shared/utils/summarize'
 import { colorToTone, STATUS_LABELS } from '../../shared/utils/status'
+import { formatTimestamp } from '../../shared/utils/time'
 import { useAuth } from '../auth/useAuth'
 import type { Observation } from '../../shared/db/schema'
 
@@ -39,10 +40,6 @@ function buildMetrics(obs: Observation): FeedMetric[] {
   if (obs.mood            != null) m.push({ label: 'Humeur',  value: obs.mood })
   if (obs.bowel_movements != null) m.push({ label: 'Selles',  value: obs.bowel_movements === 3 ? '3+' : String(obs.bowel_movements) })
   return m
-}
-
-function formatTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
 }
 
 function initials(name: string): string {
@@ -183,7 +180,7 @@ export function FeedPage() {
           return (
             <FeedEntry
               key={obs.id}
-              timestamp={formatTime(obs.recorded_at)}
+              timestamp={formatTimestamp(obs.recorded_at)}
               authorName={authorName}
               authorInitials={initials(authorName)}
               text={buildText(obs)}
