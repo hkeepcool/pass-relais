@@ -64,7 +64,7 @@ export function FeedEntry({
       {/* Timeline column */}
       <div className="w-11 shrink-0 relative">
         {/* Time */}
-        <div className={['font-mono text-[11px] font-semibold text-right pr-1.5 pt-1', toneTimeClasses[tone]].join(' ')}>
+        <div className={['font-mono text-[11px] font-semibold text-right pr-2 pt-1', toneTimeClasses[tone]].join(' ')}>
           {timestamp}
         </div>
         {/* Vertical rail */}
