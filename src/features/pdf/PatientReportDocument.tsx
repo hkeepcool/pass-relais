@@ -44,7 +44,7 @@ const S = StyleSheet.create({
   cell:         { fontSize: 8, color: C.ink },
   cellMute:     { fontSize: 8, color: C.inkMute },
   cellAmber:    { fontSize: 8, color: C.amber },
-  colTime:      { width: 40 },
+  colTime:      { width: 70 },
   colSm:        { width: 36 },
   colMd:        { width: 60 },
   colNote:      { flex: 1 },
@@ -59,7 +59,10 @@ const APP_FR:    Record<string, string> = { normal: 'Normal',  low: 'Faible',   
 const MOOD_FR:   Record<string, string> = { stable: 'Stable',  confused: 'Confus',  anxious: 'Anxieux'   }
 
 function fmtTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+  const d = new Date(iso)
+  const date = d.toLocaleDateString('fr-FR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+  const time = d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+  return `${date}\n${time}`
 }
 
 function truncate(s: string, n = 60): string {
@@ -128,7 +131,7 @@ export function PatientReportDocument({
         {/* Observation table */}
         <Text style={S.sectionLabel}>OBSERVATIONS ({sorted.length})</Text>
         <View style={S.tableHeader}>
-          <Text style={[S.colTime, S.headerCell]}>Heure</Text>
+          <Text style={[S.colTime, S.headerCell]}>Date/Heure</Text>
           <Text style={[S.colMd,   S.headerCell]}>Sommeil</Text>
           <Text style={[S.colMd,   S.headerCell]}>Appétit</Text>
           <Text style={[S.colSm,   S.headerCell]}>Douleur</Text>
